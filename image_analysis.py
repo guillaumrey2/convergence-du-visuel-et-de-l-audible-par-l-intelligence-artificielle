@@ -11,7 +11,7 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 
 # Set the model path
-MODEL_PATH = os.path.expanduser('~/models')
+MODEL_PATH = os.path.join(os.path.dirname(__file__), 'models')
 
 # Load trained models and resources
 color_model = joblib.load(os.path.join(MODEL_PATH, 'color_classifier_model.pkl'))
