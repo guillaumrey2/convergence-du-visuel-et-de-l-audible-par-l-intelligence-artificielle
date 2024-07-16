@@ -111,12 +111,17 @@ def regularity(image, block_size=32):
     scores = []
     for i in range(0, image.shape[0], block_size):
         for j in range(0, image.shape[1], block_size):
-            block = image[i:i+block_size, j+j+block_size]
+            block = image[i:i+block_size, j:j+block_size]
+            print(f"Block shape: {block.shape}")  # Debug print
+            # Ensure the block is complete
             if block.shape[0] == block_size and block.shape[1] == block_size:
                 scores.append((coarseness(block, 5), contrast(block)))
-    scores = np.array(scores)
-    std_devs = np.std(scores, axis=0)
-    return np.mean(std_devs)
+    if scores:
+        scores = np.array(scores)
+        std_devs = np.std(scores, axis=0)
+        return np.mean(std_devs)
+    else:
+        return 0  # Handle case where no complete blocks were found
 
 def roughness(fcrs, fcon):
     return fcrs + fcon
