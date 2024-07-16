@@ -3,5 +3,5 @@ numpy
 joblib
 tensorflow
 scikit-image
-scikit-learn
+scikit-learn==1.5.0
 matplotlib
