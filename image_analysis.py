@@ -320,6 +320,11 @@ def analyze_image(image_path, output_dir):
     print(f"Analysis results saved to {json_filename}")
 
 if __name__ == "__main__":
-    image_path = r'C:\Users\guillaum.rey2\OneDrive - HESSO\TB\Data\test_images\10.jpg'
-    output_dir = r'C:\Users\guillaum.rey2\OneDrive - HESSO\TB\Data\test_images'
+    import sys
+    if len(sys.argv) != 3:
+        print("Usage: python full_pipeline.py <image_path> <output_dir>")
+        sys.exit(1)
+
+    image_path = sys.argv[1]
+    output_dir = sys.argv[2]
     analyze_image(image_path, output_dir)
