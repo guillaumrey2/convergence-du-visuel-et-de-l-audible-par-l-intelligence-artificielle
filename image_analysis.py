@@ -1,8 +1,9 @@
+import os
+import sys
 import cv2
 import numpy as np
 import json
 import joblib
-import os
 from tensorflow.keras.preprocessing.image import img_to_array, load_img
 from skimage.segmentation import felzenszwalb
 from sklearn.cluster import KMeans
@@ -10,7 +11,7 @@ from sklearn.metrics import silhouette_score
 import tensorflow as tf
 import matplotlib.pyplot as plt
 
-# Set the model path
+# Set the model path relative to the script location
 MODEL_PATH = os.path.join(os.path.dirname(__file__), 'models')
 
 # Load trained models and resources
@@ -110,7 +111,7 @@ def regularity(image, block_size=32):
     scores = []
     for i in range(0, image.shape[0], block_size):
         for j in range(0, image.shape[1], block_size):
-            block = image[i:i+block_size, j:j+block_size]
+            block = image[i:i+block_size, j+j+block_size]
             if block.shape[0] == block_size and block.shape[1] == block_size:
                 scores.append((coarseness(block, 5), contrast(block)))
     scores = np.array(scores)
@@ -320,7 +321,6 @@ def analyze_image(image_path, output_dir):
     print(f"Analysis results saved to {json_filename}")
 
 if __name__ == "__main__":
-    import sys
     if len(sys.argv) != 3:
         print("Usage: python full_pipeline.py <image_path> <output_dir>")
         sys.exit(1)
