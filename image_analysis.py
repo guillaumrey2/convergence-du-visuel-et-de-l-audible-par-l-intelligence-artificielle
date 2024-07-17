@@ -310,7 +310,6 @@ def analyze_image(image_path, output_dir):
             "coarseness": fcrs,
             "contrast": fcon,
             "directionality": fd,
-            "main_direction": main_direction,
             "regularity": freg,
             "roughness": f_rgh
         }
