@@ -41,7 +41,10 @@ class Handler(FileSystemEventHandler):
             # Call SuperCollider script
             sclang_path = "/usr/local/bin/sclang"
             sc_script_path = os.path.expanduser("~/scscript/sound_synthesis.scd")
-            subprocess.run([sclang_path, sc_script_path], check=True)
+            # Set environment variables to avoid display issues
+            env = os.environ.copy()
+            env['QT_QPA_PLATFORM'] = 'offscreen'
+            subprocess.run([sclang_path, sc_script_path], check=True, env=env)
 
 if __name__ == '__main__':
     w = Watcher()
