@@ -5,7 +5,7 @@ from watchdog.events import FileSystemEventHandler
 import subprocess
 
 class Watcher:
-    DIRECTORY_TO_WATCH = "~/convergence-du-visuel-et-de-l-audible-par-l-intelligence-artificielle/results"
+    DIRECTORY_TO_WATCH = os.path.expanduser("~/convergence-du-visuel-et-de-l-audible-par-l-intelligence-artificielle/results")
 
     def __init__(self):
         self.observer = Observer()
@@ -17,7 +17,7 @@ class Watcher:
         try:
             while True:
                 time.sleep(5)
-        except:
+        except KeyboardInterrupt:
             self.observer.stop()
             print("Observer Stopped")
 
@@ -33,17 +33,14 @@ class Handler(FileSystemEventHandler):
         elif event.src_path.endswith(".json"):
             print(f"New JSON file detected: {event.src_path}")
             
-            # Escape backslashes in the file path
-            escaped_path = event.src_path.replace("\\", "\\\\")
-            
-            # Write the escaped path to a temporary file
-            temp_file_path = "~/convergence-du-visuel-et-de-l-audible-par-l-intelligence-artificielle/temp.txt"
+            # Write the path to a temporary file
+            temp_file_path = os.path.expanduser("~/convergence-du-visuel-et-de-l-audible-par-l-intelligence-artificielle/temp.txt")
             with open(temp_file_path, 'w') as f:
-                f.write(escaped_path)
+                f.write(event.src_path)
             
             # Call SuperCollider script
             sclang_path = "/usr/local/bin/sclang"
-            sc_script_path = "~/scscript/sound_synthesis.scd"
+            sc_script_path = os.path.expanduser("~/scscript/sound_synthesis.scd")
             subprocess.run([sclang_path, sc_script_path], check=True)
 
 if __name__ == '__main__':
