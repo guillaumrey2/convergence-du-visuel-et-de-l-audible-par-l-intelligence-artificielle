@@ -9,10 +9,10 @@ class Watcher:
 
     def __init__(self):
         self.observer = Observer()
-
+        self.event_handler = Handler()
+        self.observer.schedule(self.event_handler, self.DIRECTORY_TO_WATCH, recursive=False)
+        
     def run(self):
-        event_handler = Handler()
-        self.observer.schedule(event_handler, self.DIRECTORY_TO_WATCH, recursive=False)
         self.observer.start()
         try:
             while True:
@@ -20,11 +20,9 @@ class Watcher:
         except KeyboardInterrupt:
             self.observer.stop()
             print("Observer Stopped")
-
         self.observer.join()
 
 class Handler(FileSystemEventHandler):
-
     @staticmethod
     def on_created(event):
         if event.is_directory:
