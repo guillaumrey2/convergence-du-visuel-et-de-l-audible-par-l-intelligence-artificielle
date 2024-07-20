@@ -16,6 +16,15 @@ log_message() {
 
 log_message "Starting watch_results.sh"
 
+# Function to restart SuperCollider server
+restart_supercollider() {
+    log_message "Restarting SuperCollider server..."
+    pkill -f sclang
+    sleep 1
+    QT_QPA_PLATFORM=offscreen "$SCLANG_PATH" "$SC_SCRIPT_PATH" >> "$LOG_FILE" 2>&1
+    log_message "SuperCollider server restarted."
+}
+
 # Monitor the results directory for new JSON files
 inotifywait -m -e create --format '%w%f' "$WATCHED_DIR" | while read NEWFILE
 do
@@ -28,8 +37,8 @@ do
         echo "$NEWFILE" > "$TEMP_FILE"
         log_message "Path written to temp file: $TEMP_FILE"
         
-        # Call SuperCollider script
-        QT_QPA_PLATFORM=offscreen "$SCLANG_PATH" "$SC_SCRIPT_PATH" >> "$LOG_FILE" 2>&1
+        # Restart SuperCollider server
+        restart_supercollider
         
         if [[ $? -ne 0 ]]; then
             log_message "Error executing SuperCollider script for file: $NEWFILE"
