@@ -33,10 +33,14 @@ do
         
         if [[ $? -ne 0 ]]; then
             log_message "Error executing SuperCollider script for file: $NEWFILE"
-        else:
+        else
             log_message "SuperCollider script executed successfully for file: $NEWFILE"
         fi
+
+        log_message "Finished processing file: $NEWFILE"
     else
         log_message "Ignored file: $NEWFILE"
     fi
+
+    log_message "Loop continues..."
 done
