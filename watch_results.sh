@@ -21,14 +21,17 @@ restart_supercollider() {
     log_message "Restarting SuperCollider server..."
     pkill -f sclang
     pkill -f scsynth
-    sleep 5  # Ensure there is enough time for the server to shut down completely
+
+    # Wait until the SuperCollider server is completely shut down
+    while pgrep -f sclang > /dev/null || pgrep -f scsynth > /dev/null; do
+        log_message "Waiting for SuperCollider server to shut down..."
+        sleep 1
+    done
+
     log_message "SuperCollider server stopped."
-    QT_QPA_PLATFORM=offscreen "$SCLANG_PATH" "$SC_SCRIPT_PATH" >> "$LOG_FILE" 2>&1
-    if [[ $? -ne 0 ]]; then
-        log_message "Error restarting SuperCollider server."
-    else
-        log_message "SuperCollider server started successfully."
-    fi
+    QT_QPA_PLATFORM=offscreen "$SCLANG_PATH" "$SC_SCRIPT_PATH" >> "$LOG_FILE" 2>&1 &
+    sleep 10  # Ensure there's enough time for the server to start up completely
+    log_message "SuperCollider server started."
 }
 
 # Monitor the results directory for new JSON files
@@ -60,7 +63,6 @@ while true; do
         fi
 
         log_message "Loop continues..."
-        sleep 2  # Small delay to ensure inotifywait catches subsequent events
     done
     log_message "inotifywait loop ended, restarting..."
     sleep 1
