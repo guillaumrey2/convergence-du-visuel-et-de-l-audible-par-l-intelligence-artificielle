@@ -24,7 +24,11 @@ restart_supercollider() {
     sleep 5  # Ensure there is enough time for the server to shut down completely
     log_message "SuperCollider server stopped."
     QT_QPA_PLATFORM=offscreen "$SCLANG_PATH" "$SC_SCRIPT_PATH" >> "$LOG_FILE" 2>&1
-    log_message "SuperCollider server started."
+    if [[ $? -ne 0 ]]; then
+        log_message "Error restarting SuperCollider server."
+    else
+        log_message "SuperCollider server started successfully."
+    fi
 }
 
 # Monitor the results directory for new JSON files
@@ -56,6 +60,7 @@ while true; do
         fi
 
         log_message "Loop continues..."
+        sleep 2  # Small delay to ensure inotifywait catches subsequent events
     done
     log_message "inotifywait loop ended, restarting..."
     sleep 1
