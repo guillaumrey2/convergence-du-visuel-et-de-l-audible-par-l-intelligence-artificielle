@@ -21,7 +21,13 @@ restart_supercollider() {
     log_message "Restarting SuperCollider server..."
     pkill -f sclang
     pkill -f scsynth
-    sleep 5  # Ensure there is enough time for the server to shut down completely
+
+    # Wait until the SuperCollider server is completely shut down
+    while pgrep -f sclang > /dev/null || pgrep -f scsynth > /dev/null; do
+        log_message "Waiting for SuperCollider server to shut down..."
+        sleep 1
+    done
+
     log_message "SuperCollider server stopped."
     QT_QPA_PLATFORM=offscreen "$SCLANG_PATH" "$SC_SCRIPT_PATH" >> "$LOG_FILE" 2>&1
     log_message "SuperCollider server started."
