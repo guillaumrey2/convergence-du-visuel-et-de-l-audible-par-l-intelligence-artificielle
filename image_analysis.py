@@ -21,7 +21,7 @@ emotion_model = joblib.load(os.path.join(MODEL_PATH, 'emotion_classifier_model.p
 color_palette = np.load(os.path.join(MODEL_PATH, 'color_palette.npy'))
 art_style_model = tf.keras.models.load_model(os.path.join(MODEL_PATH, 'art_style_model.h5'))
 
-# Normalization ranges based on your data analysis
+# Normalization ranges based on data analysis
 COARSENESS_RANGE = (0, 5)
 CONTRAST_RANGE = (0, 100)
 DIRECTIONALITY_RANGE = (0, 0.5)
@@ -39,6 +39,8 @@ style_map_reverse = {
     6: 'romanticism',
     7: 'symbolism'
 }
+
+# ----- TEXTURE ----- #
 
 def tamura_preprocess_image(image):
     print("Preprocessing the image for grayscale and blur...")
@@ -146,6 +148,8 @@ def calculate_tamura_features(image):
     
     return fcrs_normalized, fcon_normalized, fd_normalized, main_direction, freg_normalized, f_rgh_normalized
 
+# ----- COLOR ----- #
+
 def color_preprocess_image(image):
     image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     blurred_image = cv2.GaussianBlur(image_rgb, (5, 5), 0)
@@ -219,6 +223,8 @@ def predict_color_label(dominant_color):
     prediction = color_model.predict(dominant_color_rgb)
     color_label = color_encoder.inverse_transform(prediction)
     return color_label[0]
+
+# ----- EMOTION ----- #
 
 def repaint_image_with_palette(image, palette):
     print("Repainting image")
