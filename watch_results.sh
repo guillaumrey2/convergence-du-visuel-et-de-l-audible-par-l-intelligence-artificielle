@@ -19,7 +19,7 @@ log_message "Starting watch_results.sh"
 # Function to restart SuperCollider server
 restart_supercollider() {
     log_message "Restarting SuperCollider server..."
-    pkill -f sclang
+    pkill -f sclang || log_message "No existing SuperCollider server to kill."
     sleep 1
     QT_QPA_PLATFORM=offscreen "$SCLANG_PATH" "$SC_SCRIPT_PATH" >> "$LOG_FILE" 2>&1
     log_message "SuperCollider server restarted."
