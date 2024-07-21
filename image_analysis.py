@@ -22,7 +22,7 @@ color_palette = np.load(os.path.join(MODEL_PATH, 'color_palette.npy'))
 art_style_model = tf.keras.models.load_model(os.path.join(MODEL_PATH, 'art_style_model.h5'))
 
 # Normalization ranges based on data analysis
-COARSENESS_RANGE = (0, 5)
+COARSENESS_RANGE = (1, 3.5)
 CONTRAST_RANGE = (0, 100)
 DIRECTIONALITY_RANGE = (0, 0.5)
 ROUGHNESS_RANGE = (0, 100)
