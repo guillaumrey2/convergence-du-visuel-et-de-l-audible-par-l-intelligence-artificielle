@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Charger une image</title>
+    <title>Upload Image</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <h1>Charger une image</h1>
-    <form action="/loadImage" method="post" enctype="multipart/form-data">
-        <input type="file" name="file">
-        <input type="submit" value="Charger">
-    </form>
+    <div>
+        <h1>Upload Your Image</h1>
+        <form action="/loadImage" method="post" enctype="multipart/form-data">
+            <input type="file" name="file">
+            <input type="submit" value="Upload">
+        </form>
+    </div>
 </body>
 </html>

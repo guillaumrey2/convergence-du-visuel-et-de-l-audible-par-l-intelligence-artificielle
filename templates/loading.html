@@ -6,20 +6,22 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
-    <div class="loader"></div>
-    <h1>Please wait while we process your request...</h1>
+    <div>
+        <div class="loader"></div>
+        <h1>Please wait while we process your request...</h1>
+    </div>
     <script>
-        var filename = "{{ filename }}"; // Ensuring this value is correctly passed from Flask
+        var filename = "{{ filename }}";
         function checkStatus() {
             $.getJSON('/check_status/' + filename, function(data) {
                 if (data.ready) {
                     window.location.href = '/recordings/' + filename;
                 } else {
-                    setTimeout(checkStatus, 5000); // Check every 5 seconds
+                    setTimeout(checkStatus, 5000);
                 }
             }).fail(function() {
                 console.log("Error checking status");
-                setTimeout(checkStatus, 5000); // Ensure we handle failures
+                setTimeout(checkStatus, 5000);
             });
         }
         checkStatus();
