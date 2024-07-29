@@ -53,7 +53,18 @@ def recordings(filename):
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+    base_path = os.path.join(app.config['UPLOAD_FOLDER'], filename.rsplit('.', 1)[0])
+    audio_file_path = base_path + '.wav'
+    done_flag_path = base_path + '.wav.done'
+
+    if os.path.exists(done_flag_path):
+        if os.path.exists(audio_file_path):
+            return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+        else:
+            return "Audio file not found, but flag file present.", 404
+    else:
+        return "Audio file is still processing.", 202
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8000, debug=True)
