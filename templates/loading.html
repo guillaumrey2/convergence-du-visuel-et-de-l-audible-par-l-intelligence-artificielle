@@ -7,14 +7,17 @@
 <body>
     <h1>Loading... Please wait.</h1>
     <script>
+        var filename = "{{ filename }}";  // Ensuring this value is correctly passed from Flask
         function checkStatus() {
-            const filename = "{{ filename }}";  // Passed from Flask
             $.getJSON('/check_status/' + filename, function(data) {
                 if (data.ready) {
                     window.location.href = '/recordings/' + filename;
                 } else {
                     setTimeout(checkStatus, 5000);  // Check every 5 seconds
                 }
+            }).fail(function() {
+                console.log("Error checking status");
+                setTimeout(checkStatus, 5000);  // Ensure we handle failures
             });
         }
         checkStatus();
