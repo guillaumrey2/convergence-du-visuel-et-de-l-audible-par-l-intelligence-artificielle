@@ -43,9 +43,12 @@ def check_status(filename):
 
 @app.route('/recordings/<filename>')
 def recordings(filename):
-    audio_file = os.path.join(app.config['RECORDINGS_FOLDER'], filename.rsplit('.', 1)[0] + '.wav')
+    base_filename = os.path.splitext(filename)[0]
+    audio_filename = base_filename + '.wav'
+    audio_file = os.path.join(app.config['RECORDINGS_FOLDER'], audio_filename)
     if os.path.isfile(audio_file):
-        return render_template('recordings.html', filename=filename, audio_file=audio_file)
+        # Pass the filename for downloading and the audio filename for playing
+        return render_template('recordings.html', filename=filename, audio_filename=audio_filename)
     return "Recording not found", 404
 
 @app.route('/uploads/<filename>')

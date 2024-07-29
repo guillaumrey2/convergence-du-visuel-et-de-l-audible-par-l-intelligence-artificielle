@@ -1,18 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Enregistrements</title>
+    <title>Recording Page</title>
 </head>
 <body>
-    <h1>Enregistrement pour l'image {{ filename }}</h1>
-    {% if audio_file %}
+    <h1>Recording for {{ filename }}</h1>
     <audio controls>
-        <source src="{{ url_for('static', filename=audio_file) }}" type="audio/mpeg">
+        <source src="{{ url_for('uploaded_file', filename=audio_filename) }}" type="audio/wav">
         Your browser does not support the audio element.
     </audio>
-    {% else %}
-    <p>L'audio est en cours de traitement...</p>
-    {% endif %}
-    <a href="/">Retour à l'accueil</a>
+    <br>
+    <a href="{{ url_for('uploaded_file', filename=audio_filename) }}" download="{{ audio_filename }}">Download Audio</a>
 </body>
 </html>
