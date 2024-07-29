@@ -9,3 +9,6 @@ watchdog
 gunicorn
 Flask
 Flask-Uploads
+pandas
+seaborn
+matplotlib.pyplot
