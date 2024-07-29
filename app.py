@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, redirect, url_for, send_from_
 import os
 from werkzeug.utils import secure_filename
 import logging
+import threading
+import time
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -9,7 +11,9 @@ app = Flask(__name__)
 
 # Configuration des dossiers pour les fichiers uploadés et les fichiers statiques
 app.config['UPLOAD_FOLDER'] = '/home/guillaum.rey2@hevs.ch/convergence-du-visuel-et-de-l-audible-par-l-intelligence-artificielle/images'
+app.config['RECORDINGS_FOLDER'] = '/home/guillaum.rey2@hevs.ch/convergence-du-visuel-et-de-l-audible-par-l-intelligence-artificielle/recordings'
 print("Upload folder set to:", app.config['UPLOAD_FOLDER'])
+print("Recordings folder set to:", app.config['RECORDINGS_FOLDER'])
 app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
 
 def allowed_file(filename):
@@ -17,7 +21,6 @@ def allowed_file(filename):
 
 @app.route('/')
 def accueil():
-    # Affiche la page d'accueil
     return render_template('accueil.html')
 
 @app.route('/loadImage', methods=['GET', 'POST'])
@@ -37,18 +40,39 @@ def loadImage():
             try:
                 file.save(path)
                 logging.debug("File saved successfully")
+                # Start a background thread to check for the corresponding audio file
+                threading.Thread(target=check_for_recording, args=(filename,)).start()
+                return render_template('loading.html')
             except Exception as e:
                 logging.error(f"Error saving file: {e}")
                 return "Error saving file", 500
-            return redirect(url_for('recordings', filename=filename))
         else:
             logging.error("File not allowed or not received")
     return render_template('loadImage.html')
 
+def check_for_recording(image_filename):
+    base_filename = os.path.splitext(image_filename)[0]
+    expected_audio_file = base_filename + '.wav'
+    while True:
+        time.sleep(5)  # Check every 5 seconds
+        if os.path.isfile(os.path.join(app.config['RECORDINGS_FOLDER'], expected_audio_file)):
+            # Redirect to the recordings page
+            logging.debug(f"Recording found: {expected_audio_file}")
+            with app.test_request_context():
+                redirect_url = url_for('recordings', filename=image_filename)
+                logging.debug(f"Redirecting to: {redirect_url}")
+                return redirect(redirect_url)
+        else:
+            logging.debug("Recording not found yet...")
+
 @app.route('/recordings/<filename>')
 def recordings(filename):
-    audio_file = os.path.join('recordings', filename.rsplit('.', 1)[0] + '.wav')
-    return render_template('recordings.html', filename=filename, audio_file=audio_file)
+    base_filename = os.path.splitext(filename)[0]
+    audio_file = os.path.join(app.config['RECORDINGS_FOLDER'], base_filename + '.wav')
+    if os.path.isfile(audio_file):
+        return render_template('recordings.html', filename=filename, audio_file=audio_file)
+    else:
+        return "Recording not found", 404
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
