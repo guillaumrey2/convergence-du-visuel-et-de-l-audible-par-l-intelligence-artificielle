@@ -11,4 +11,4 @@ Flask
 Flask-Uploads
 pandas
 seaborn
-matplotlib.pyplot
+matplotlib
