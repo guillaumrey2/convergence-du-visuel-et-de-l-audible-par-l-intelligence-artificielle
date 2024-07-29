@@ -1,11 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loading...</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
-    <h1>Loading... Please wait while your image is being processed.</h1>
+    <h1>Loading... Please wait.</h1>
+    <script>
+        function checkStatus() {
+            const filename = "{{ filename }}";  // Passed from Flask
+            $.getJSON('/check_status/' + filename, function(data) {
+                if (data.ready) {
+                    window.location.href = '/recordings/' + filename;
+                } else {
+                    setTimeout(checkStatus, 5000);  // Check every 5 seconds
+                }
+            });
+        }
+        checkStatus();
+    </script>
 </body>
 </html>
