@@ -162,6 +162,11 @@ cython_debug/
 #.idea/
 
 # Server folders
-models/
-images/
-results/
+models/*
+!models/.gitkeep
+images/*
+!images/.gitkeep
+results/*
+!results/.gitkeep
+recordings/*
+!recordings/.gitkeep
