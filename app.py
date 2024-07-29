@@ -6,6 +6,7 @@ app = Flask(__name__)
 
 # Configuration des dossiers pour les fichiers uploadés et les fichiers statiques
 app.config['UPLOAD_FOLDER'] = '/home/guillaum.rey2@hevs.ch/convergence-du-visuel-et-de-l-audible-par-l-intelligence-artificielle/images'
+print("Upload folder set to:", app.config['UPLOAD_FOLDER'])
 app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
 
 def allowed_file(filename):
@@ -22,7 +23,9 @@ def loadImage():
         file = request.files['file']
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            print("Current UPLOAD_FOLDER:", app.config['UPLOAD_FOLDER'])  # Debugging line
+            file.save(path)
             return redirect(url_for('recordings', filename=filename))
     return render_template('loadImage.html')
 
