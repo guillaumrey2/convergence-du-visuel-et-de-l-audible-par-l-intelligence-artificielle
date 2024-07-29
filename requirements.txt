@@ -12,3 +12,4 @@ Flask-Uploads
 pandas
 seaborn
 matplotlib
+group-lasso

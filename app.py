@@ -47,7 +47,7 @@ def loadImage():
 
 @app.route('/recordings/<filename>')
 def recordings(filename):
-    audio_file = os.path.join('recordings', filename.rsplit('.', 1)[0] + '.mp3')
+    audio_file = os.path.join('recordings', filename.rsplit('.', 1)[0] + '.wav')
     return render_template('recordings.html', filename=filename, audio_file=audio_file)
 
 @app.route('/uploads/<filename>')
