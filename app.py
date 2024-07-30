@@ -53,17 +53,23 @@ def recordings(filename):
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
-    file_path = os.path.join(app.config['RECORDINGS_FOLDER'], filename)
+    # Determine the folder based on file extension
+    if filename.lower().endswith(('.png', '.jpg', '.jpeg', '.gif')):
+        folder = app.config['UPLOAD_FOLDER']
+    else:
+        folder = app.config['RECORDINGS_FOLDER']
+    
+    file_path = os.path.join(folder, filename)
     if os.path.exists(file_path):
-        try:
-            return send_file(file_path, mimetype='audio/wav')
-        except Exception as e:
-            app.logger.error(f"Failed to send file: {e}")
-            return "Error sending file", 500
+        # Determine the MIME type based on file extension
+        if filename.lower().endswith(('.wav', '.mp3')):
+            mime_type = 'audio/wav'
+        else:
+            mime_type = 'image/jpeg'  # Default for images
+        return send_file(file_path, mimetype=mime_type)
     else:
         app.logger.error("File not found: " + file_path)
         return "File not found", 404
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8000, debug=True)

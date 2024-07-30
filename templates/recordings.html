@@ -8,14 +8,14 @@
     <div id="floatingImages" class="floating-images"></div>
     <div class="content">
         <h1>Recording for {{ filename }}</h1>
-        <!-- Dynamic image display based on the uploaded file -->
-        <img src="{{ url_for('uploaded_file', filename=filename.rsplit('.', 1)[0] + '.jpg') }}" alt="Uploaded Image" style="max-width: 100%; height: auto;">
+        <img src="{{ url_for('uploads', filename=filename) }}" alt="Uploaded Image" style="max-width: 100%; height: auto; display: block; margin-bottom: 20px;">
         <audio controls>
-            <source src="{{ url_for('uploaded_file', filename=audio_filename) }}" type="audio/wav">
+            <!-- Adjusted to correct audio filename extension assumption -->
+            <source src="{{ url_for('uploads', filename=filename.rsplit('.', 1)[0] + '.wav') }}" type="audio/wav">
             Your browser does not support the audio element.
         </audio>
         <br>
-        <a href="{{ url_for('uploaded_file', filename=audio_filename) }}" download="{{ audio_filename }}">Download Audio</a>
+        <a href="{{ url_for('uploads', filename=filename.rsplit('.', 1)[0] + '.wav') }}" download="{{ filename.rsplit('.', 1)[0] + '.wav' }}">Download Audio</a>
     </div>
     <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 </body>
