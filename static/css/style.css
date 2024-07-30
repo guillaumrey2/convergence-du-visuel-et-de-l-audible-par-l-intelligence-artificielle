@@ -75,7 +75,7 @@ input[type="file"] {
     height: 100%;
     overflow: hidden;
     pointer-events: none; /* Disable interaction with floating elements */
-    z-index: -1; /* Ensures that it stays in the background */
+    z-index: 1; /* Ensures that it stays in the background */
 }
 
 .floating-img {
