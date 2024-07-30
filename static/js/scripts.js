@@ -1,13 +1,28 @@
 window.addEventListener('DOMContentLoaded', () => {
     const container = document.getElementById('floatingImages');
-    for (let i = 0; i < 5; i++) {  // Assuming you have 5 images to cycle through
+    if (!container) {
+        console.error("Container for floating images not found!");
+        return;
+    }
+
+    // Clear previous images if any
+    container.innerHTML = '';
+
+    // Ensure images are loaded and positioned correctly
+    const imageNames = ['0012', '0031', '0090', '0157', '0268']; // Specific image identifiers
+    for (let i = 0; i < imageNames.length; i++) {
         const img = document.createElement('img');
-        img.src = `/static/images/emotion_00${12 + i * 31}.jpg`;  // Update to your actual image paths
+        img.src = `/static/images/emotion_${imageNames[i]}.jpg`; // Correct path based on your image names
         img.className = 'floating-img';
         img.style.position = 'absolute';
         img.style.top = `${Math.random() * 100}%`;
         img.style.left = `${Math.random() * 100}%`;
-        img.style.transform = `translate(-50%, -50%) scale(${Math.random() * 0.5 + 0.5})`;
+        img.onload = () => {
+            img.style.transform = `translate(-50%, -50%) scale(${Math.random() * 0.5 + 0.5})`;
+        };
+        img.onerror = () => {
+            console.error("Failed to load image:", img.src);
+        };
         container.appendChild(img);
     }
 
@@ -16,7 +31,7 @@ window.addEventListener('DOMContentLoaded', () => {
         const { clientX, clientY } = e;
         const centerX = window.innerWidth / 2;
         const centerY = window.innerHeight / 2;
-        const deltaX = (clientX - centerX) * 0.1;
+        const deltaX = (clientX - centerX) * 0.1; // Adjust for more subtle movement
         const deltaY = (clientY - centerY) * 0.1;
 
         Array.from(container.children).forEach(img => {
