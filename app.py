@@ -8,8 +8,8 @@ logging.basicConfig(level=logging.DEBUG)
 app = Flask(__name__)
 
 # Configuration constants
-app.config['UPLOAD_FOLDER'] = '/path/to/your/upload/folder'
-app.config['RECORDINGS_FOLDER'] = '/path/to/your/recordings/folder'
+app.config['UPLOAD_FOLDER'] = '/home/guillaum.rey2@hevs.ch/convergence-du-visuel-et-de-l-audible-par-l-intelligence-artificielle/images'
+app.config['RECORDINGS_FOLDER'] = '/home/guillaum.rey2@hevs.ch/convergence-du-visuel-et-de-l-audible-par-l-intelligence-artificielle/recordings'
 app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
 
 # Helper function to check file extensions
