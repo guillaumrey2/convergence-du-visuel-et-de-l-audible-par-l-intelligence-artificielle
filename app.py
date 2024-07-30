@@ -30,15 +30,11 @@ def loadImage():
             try:
                 file.save(filepath)
                 logging.debug("File saved successfully")
-                return redirect(url_for('loading', filename=filename))
+                return render_template('loading.html', filename=filename)  # Pass filename to the template
             except Exception as e:
                 logging.error(f"Error saving file: {e}")
                 return "Error saving file", 500
     return render_template('loadImage.html')
-
-@app.route('/loading/<filename>')
-def loading(filename):
-    return render_template('loading.html', filename=filename)
 
 @app.route('/check_status/<filename>')
 def check_status(filename):

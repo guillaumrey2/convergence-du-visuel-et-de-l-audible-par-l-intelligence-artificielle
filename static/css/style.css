@@ -62,16 +62,14 @@ input[type="file"] {
     }
 }
 
-/* Floating images styles */
 .floating-images {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    overflow: hidden;
     pointer-events: none;
-    z-index: -1;
+    overflow: hidden;
 }
 
 .floating-img {
@@ -80,5 +78,17 @@ input[type="file"] {
     height: 10vmin;
     opacity: 0.6;
     filter: blur(8px);
-    transition: transform 5s ease-in-out;
+    animation: float 20s infinite linear alternate;
+}
+
+@keyframes float {
+    0% {
+        transform: translate(0px, 0px) scale(1);
+    }
+    50% {
+        transform: translate(30px, -30px) scale(1.1);
+    }
+    100% {
+        transform: translate(0px, 0px) scale(1);
+    }
 }
