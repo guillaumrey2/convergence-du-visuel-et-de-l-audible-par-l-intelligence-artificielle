@@ -8,22 +8,21 @@ window.addEventListener('DOMContentLoaded', () => {
         img.style.position = 'absolute';
         img.style.top = `${Math.random() * 100}%`;
         img.style.left = `${Math.random() * 100}%`;
-        img.style.transform = `translate(-50%, -50%) scale(${Math.random() * 0.5 + 5})`;
-        img.style.opacity = 0; // Start with an opacity of 0
+        img.style.transform = `translate(-50%, -50%) scale(${Math.random() * 0.5 + 3})`;
+        img.style.opacity = 0;
         container.appendChild(img);
 
-        // Increase opacity after adding to the container to start fade-in effect
         setTimeout(() => {
-            img.style.opacity = 0.6; // Fade to 60% opacity
+            img.style.opacity = 0.6;
         }, 10);
 
-        const speedX = Math.random() * 0.1 - 0.05; // Reduced speed for horizontal movement
-        const speedY = Math.random() * 0.1 - 0.05; // Reduced speed for vertical movement
+        const speedX = Math.random() * 0.1 - 0.05;
+        const speedY = Math.random() * 0.1 - 0.05;
         setInterval(() => {
             const topVal = parseFloat(img.style.top);
             const leftVal = parseFloat(img.style.left);
-            img.style.top = `${(topVal + speedY + 100) % 100}%`; // Ensure the values wrap around
-            img.style.left = `${(leftVal + speedX + 100) % 100}%`; // Ensuring wrapping around
-        }, 100); // Increased interval to slow down the movement
+            img.style.top = `${(topVal + speedY + 100) % 100}%`;
+            img.style.left = `${(leftVal + speedX + 100) % 100}%`;
+        }, 100);
     }
 });
