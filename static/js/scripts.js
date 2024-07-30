@@ -8,12 +8,15 @@ window.addEventListener('DOMContentLoaded', () => {
         img.style.position = 'absolute';
         img.style.top = `${Math.random() * 100}%`;
         img.style.left = `${Math.random() * 100}%`;
-        // Increase the scale factor for larger images
-        img.style.transform = `translate(-50%, -50%) scale(${Math.random() * 0.5 + 1})`;  // Increased minimum scale to 1
-        img.style.filter = 'blur(8px)';
+        img.style.transform = `translate(-50%, -50%) scale(${Math.random() * 0.5 + 5})`;
+        img.style.opacity = 0; // Start with an opacity of 0
         container.appendChild(img);
 
-        // Reduce the speed for slower movement
+        // Increase opacity after adding to the container to start fade-in effect
+        setTimeout(() => {
+            img.style.opacity = 0.6; // Fade to 60% opacity
+        }, 10);
+
         const speedX = Math.random() * 0.1 - 0.05; // Reduced speed for horizontal movement
         const speedY = Math.random() * 0.1 - 0.05; // Reduced speed for vertical movement
         setInterval(() => {
