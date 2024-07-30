@@ -3,14 +3,11 @@
 <head>
     <title>Welcome</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
-    <div id="floatingImages" class="floating-images"></div>
-    <div class="content">
+    <div>
         <h1>Welcome to the Image Processing App</h1>
         <a href="/loadImage">Upload Image</a>
     </div>
-    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 </body>
 </html>

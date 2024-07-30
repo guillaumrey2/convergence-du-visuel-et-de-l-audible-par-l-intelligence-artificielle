@@ -6,25 +6,15 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
-    <div>
+    <div id="floatingImages" class="floating-images"></div>
+    <div class="content">
         <div class="loader"></div>
         <h1>Please wait while we process your request...</h1>
     </div>
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
     <script>
         var filename = "{{ filename }}";
-        function checkStatus() {
-            $.getJSON('/check_status/' + filename, function(data) {
-                if (data.ready) {
-                    window.location.href = '/recordings/' + filename;
-                } else {
-                    setTimeout(checkStatus, 5000);
-                }
-            }).fail(function() {
-                console.log("Error checking status");
-                setTimeout(checkStatus, 5000);
-            });
-        }
-        checkStatus();
+        checkStatus(); // Call the checkStatus function defined in scripts.js
     </script>
 </body>
 </html>
