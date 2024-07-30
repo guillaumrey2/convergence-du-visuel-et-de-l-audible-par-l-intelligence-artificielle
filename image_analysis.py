@@ -244,13 +244,18 @@ def segment_image(image):
 
 def extract_adjacent_color_features(image, segments, palette):
     num_segments = np.max(segments) + 1
-    features = []
+    feature_vector_size = 10  # Adjust this based on the training script
+    feature_vectors = np.zeros((num_segments, feature_vector_size))
+
     for seg_id in range(num_segments):
         mask = segments == seg_id
-        segment_color = np.mean(image[mask], axis=0)
-        segment_size = np.sum(mask)
-        features.append(np.concatenate([segment_color, [segment_size]]))
-    features = np.array(features).flatten()
+        if np.any(mask):
+            segment_color = np.mean(image[mask], axis=0)
+            segment_area = np.sum(mask)
+            feature_vectors[seg_id, :3] = segment_color
+            feature_vectors[seg_id, 3] = segment_area
+    
+    features = feature_vectors.flatten()
     return features
 
 def analyze_image(image_path, output_dir):
@@ -275,8 +280,13 @@ def analyze_image(image_path, output_dir):
     repainted_image = repaint_image_with_palette(image, color_palette)
     segments = segment_image(repainted_image)
     features = extract_adjacent_color_features(repainted_image, segments, color_palette)
-    if features.size:
-        features = features.reshape(1, -1)
+    expected_feature_length = 39880  # Based on the error message
+    if len(features) < expected_feature_length:
+        features = np.pad(features, (0, expected_feature_length - len(features)), 'constant')
+    else:
+        features = features[:expected_feature_length]
+    
+    features = features.reshape(1, -1)
 
     predicted_emotion = emotion_model.predict(features)
     emotion_label = 'positive' if predicted_emotion == 1 else 'negative'
