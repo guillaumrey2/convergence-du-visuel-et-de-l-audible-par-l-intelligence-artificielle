@@ -1,20 +1,25 @@
 /* General page styles */
-body {
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: #fff;
+body, html {
+    height: 100%;
     margin: 0;
-    padding: 40px 0;
+    padding: 0;
+    overflow: hidden;
+    font-family: 'Poppins', sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+}
+
+.content {
+    z-index: 10; /* Ensures content is above the background */
     text-align: center;
+    padding: 40px;
 }
 
 h1 {
     color: #ffffff;
-    margin-bottom: 20px;
     font-size: 24px;
 }
 
@@ -37,7 +42,6 @@ a:hover, input[type="submit"]:hover {
 
 input[type="file"] {
     padding: 10px;
-    border: none;
     border-radius: 5px;
     margin-top: 15px;
 }
@@ -55,5 +59,36 @@ input[type="file"] {
 @keyframes spin {
     100% {
         transform: rotate(360deg);
+    }
+}
+
+.floating-images {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.floating-img {
+    position: absolute;
+    width: 10vmin;
+    height: 10vmin;
+    opacity: 0.6;
+    filter: blur(8px);
+    animation: float 20s infinite linear alternate;
+}
+
+@keyframes float {
+    0% {
+        transform: translate(0px, 0px) scale(1);
+    }
+    50% {
+        transform: translate(30px, -30px) scale(1.1);
+    }
+    100% {
+        transform: translate(0px, 0px) scale(1);
     }
 }
