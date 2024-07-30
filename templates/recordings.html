@@ -9,10 +9,12 @@
     <div class="content">
         <h1>Recording for {{ filename }}</h1>
         <audio controls>
+            <!-- Ensure the endpoint name matches the Flask route function name -->
             <source src="{{ url_for('uploaded_file', filename=audio_filename) }}" type="audio/wav">
             Your browser does not support the audio element.
         </audio>
         <br>
+        <!-- Same as above, ensure consistency with Flask route function name -->
         <a href="{{ url_for('uploaded_file', filename=audio_filename) }}" download="{{ audio_filename }}">Download Audio</a>
     </div>
     <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>

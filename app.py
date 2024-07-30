@@ -53,7 +53,14 @@ def recordings(filename):
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+    # Build the full file path
+    file_path = os.path.join(app.config['RECORDINGS_FOLDER'], filename)
+    
+    # Check if the file exists
+    if os.path.exists(file_path):
+        return send_file(file_path, mimetype='audio/wav')
+    else:
+        return "File not found", 404
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8000, debug=True)
