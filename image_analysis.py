@@ -1,15 +1,16 @@
+# Import necessary libraries
 import os
 import sys
 import cv2
 import numpy as np
 import json
 import joblib
-from tensorflow.keras.preprocessing.image import img_to_array, load_img # type: ignore
-from skimage.segmentation import felzenszwalb
-from sklearn.cluster import KMeans
-from sklearn.metrics import silhouette_score
-import tensorflow as tf
-import matplotlib.pyplot as plt
+from tensorflow.keras.preprocessing.image import img_to_array, load_img  # Image processing from Keras
+from skimage.segmentation import felzenszwalb  # Image segmentation from skimage
+from sklearn.cluster import KMeans  # KMeans clustering from sklearn
+from sklearn.metrics import silhouette_score  # Silhouette score for clustering evaluation
+import tensorflow as tf  # TensorFlow for deep learning models
+import matplotlib.pyplot as plt  # Plotting library
 
 # Set the model path relative to the script location
 MODEL_PATH = os.path.join(os.path.dirname(__file__), 'models')
@@ -42,6 +43,7 @@ style_map_reverse = {
 
 # ----- TEXTURE ----- #
 
+# Function to preprocess the image for texture analysis
 def tamura_preprocess_image(image):
     print("Preprocessing the image for grayscale and blur...")
     gray_img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -49,6 +51,7 @@ def tamura_preprocess_image(image):
     smooth_img = cv2.GaussianBlur(resized_img, (5, 5), 0)
     return smooth_img
 
+# Function to calculate coarseness
 def coarseness(image, kmax):
     w, h = image.shape
     kmax = min(kmax, int(np.log2(w)), int(np.log2(h)))
@@ -78,6 +81,7 @@ def coarseness(image, kmax):
     fcrs = np.mean(Sbest)
     return fcrs
 
+# Function to calculate contrast
 def contrast(image):
     image = np.array(image, dtype=np.float32).flatten()
     m4 = np.mean((image - np.mean(image))**4)
@@ -96,6 +100,7 @@ def contrast(image):
     
     return fcon
 
+# Function to calculate directionality
 def directionality(image):
     Gx = cv2.Sobel(image, cv2.CV_64F, 1, 0, ksize=5)
     Gy = cv2.Sobel(image, cv2.CV_64F, 0, 1, ksize=5)
@@ -108,6 +113,7 @@ def directionality(image):
     
     return direction_strength
 
+# Function to calculate regularity
 def regularity(image, block_size=32):
     scores = []
     for i in range(0, image.shape[0], block_size):
@@ -122,12 +128,15 @@ def regularity(image, block_size=32):
     else:
         return 0
 
+# Function to calculate roughness
 def roughness(fcrs, fcon):
     return fcrs + fcon
 
+# Function to normalize a value
 def normalize(value, min_val, max_val):
     return (value - min_val) / (max_val - min_val)
 
+# Function to calculate Tamura texture features
 def calculate_tamura_features(image):
     print("Calculating Tamura features")
     fcrs = coarseness(image, 5)
@@ -147,12 +156,14 @@ def calculate_tamura_features(image):
 
 # ----- COLOR ----- #
 
+# Function to preprocess the image for color analysis
 def color_preprocess_image(image):
     image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     blurred_image = cv2.GaussianBlur(image_rgb, (5, 5), 0)
     resized_image = cv2.resize(blurred_image, (100, 100))
     return resized_image
 
+# Function to find the optimal number of clusters for KMeans
 def find_optimal_clusters(pixel_values, max_k=10):
     best_k = 2
     best_score = -1
@@ -165,6 +176,7 @@ def find_optimal_clusters(pixel_values, max_k=10):
             best_k = k
     return best_k
 
+# Function to filter out dark pixels
 def filter_dark_pixels(pixel_values, dark_threshold=30, black_threshold=0.5):
     dark_pixels = np.all(pixel_values < [dark_threshold, dark_threshold, dark_threshold], axis=1)
     dark_proportion = np.sum(dark_pixels) / pixel_values.shape[0]
@@ -175,7 +187,8 @@ def filter_dark_pixels(pixel_values, dark_threshold=30, black_threshold=0.5):
     
     return pixel_values
 
-def find_dominant_color(image, max_k=10, dark_threshold=30, black_threshold=0.5):
+# Function to find the dominant color in an image
+def find_dominant_color(image, max_k=10, dark_threshold=30, black_threshold=0.3):
     print("Finding dominant color")
     image_rgb = color_preprocess_image(image)
     pixel_values = image_rgb.reshape((-1, 3))
@@ -213,6 +226,7 @@ def find_dominant_color(image, max_k=10, dark_threshold=30, black_threshold=0.5)
     print(f"Extracted dominant color (RGB): {dominant_color}")
     return dominant_color
 
+# Function to predict the color label
 def predict_color_label(dominant_color):
     print("Predicting color label")
     dominant_color_rgb = np.uint8([dominant_color]).reshape(1, -1)
@@ -223,6 +237,7 @@ def predict_color_label(dominant_color):
 
 # ----- EMOTION ----- #
 
+# Function to repaint the image with the given color palette
 def repaint_image_with_palette(image, palette):
     print("Repainting image")
     h, w, _ = image.shape
@@ -234,11 +249,13 @@ def repaint_image_with_palette(image, palette):
             repainted_image[i, j] = closest_palette_color
     return repainted_image
 
+# Function to segment the image
 def segment_image(image):
     print("Segmenting image...")
     segments = felzenszwalb(image, scale=100, sigma=0.8, min_size=50)
     return segments
 
+# Function to extract adjacent color features from the image segments
 def extract_adjacent_color_features(image, segments, palette):
     num_segments = np.max(segments) + 1
     feature_vector_size = 10
@@ -255,6 +272,7 @@ def extract_adjacent_color_features(image, segments, palette):
     features = feature_vectors.flatten()
     return features
 
+# Main function to analyze the image
 def analyze_image(image_path, output_dir):
     print(f"Analyzing image: {image_path}")
     image = cv2.imread(image_path)
@@ -319,6 +337,7 @@ def analyze_image(image_path, output_dir):
     
     print(f"Analysis results saved to {json_filename}")
 
+# Entry point for the script
 if __name__ == "__main__":
     if len(sys.argv) != 3:
         print("Usage: python full_pipeline.py <image_path> <output_dir>")

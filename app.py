@@ -1,22 +1,30 @@
-from flask import Flask, render_template, request, redirect, url_for, send_from_directory, jsonify, send_file
+# Import necessary libraries
+from flask import Flask, render_template, request, redirect, url_for, jsonify, send_file
 import os
 from werkzeug.utils import secure_filename
 import logging
 
+# Configure logging
 logging.basicConfig(level=logging.DEBUG)
+
+# Initialize the Flask application
 app = Flask(__name__)
 
+# Configure upload and recordings folders and allowed extensions
 app.config['UPLOAD_FOLDER'] = '/home/guillaum.rey2@hevs.ch/convergence-du-visuel-et-de-l-audible-par-l-intelligence-artificielle/images'
 app.config['RECORDINGS_FOLDER'] = '/home/guillaum.rey2@hevs.ch/convergence-du-visuel-et-de-l-audible-par-l-intelligence-artificielle/recordings'
 app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
 
+# Function to check if a file is allowed based on its extension
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
+# Route for the home page
 @app.route('/')
 def accueil():
     return render_template('accueil.html')
 
+# Route to load an image
 @app.route('/loadImage', methods=['GET', 'POST'])
 def loadImage():
     if request.method == 'POST':
@@ -29,10 +37,12 @@ def loadImage():
             return redirect(url_for('loading', filename=filename))
     return render_template('loadImage.html')
 
+# Route to show the loading page
 @app.route('/loading/<filename>')
 def loading(filename):
     return render_template('loading.html', filename=filename)
 
+# Route to check the status of a file
 @app.route('/check_status/<filename>')
 def check_status(filename):
     done_flag_path = os.path.join(app.config['RECORDINGS_FOLDER'], filename.rsplit('.', 1)[0] + '.wav.done')
@@ -40,6 +50,7 @@ def check_status(filename):
         return jsonify({'ready': True})
     return jsonify({'ready': False})
 
+# Route to display the recordings page
 @app.route('/recordings/<filename>')
 def recordings(filename):
     audio_filename = os.path.splitext(filename)[0] + '.wav'
@@ -48,6 +59,7 @@ def recordings(filename):
         return render_template('recordings.html', filename=filename, audio_filename=audio_filename)
     return "Recording not found", 404
 
+# Route to serve uploaded files
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
     if filename.lower().endswith(('.png', '.jpg', '.jpeg', '.gif')):
@@ -66,5 +78,6 @@ def uploaded_file(filename):
         app.logger.error("File not found: " + file_path)
         return "File not found", 404
 
+# Run the application
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8000, debug=True)
