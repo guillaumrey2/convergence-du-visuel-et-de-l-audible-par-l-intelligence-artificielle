@@ -10,15 +10,12 @@ body, html {
     align-items: center;
     background: linear-gradient(135deg, #667eea, #764ba2);
     color: #fff;
-    position: relative; /* Ensures proper stacking context */
 }
 
 .content {
     z-index: 10; /* Ensures content is above the background */
     text-align: center;
     padding: 40px;
-    background: rgba(0, 0, 0, 0.6); /* Optional: adds a dark semi-transparent overlay for better readability */
-    border-radius: 10px;
 }
 
 h1 {
@@ -36,7 +33,6 @@ a, input[type="submit"] {
     transition: background-color 0.3s ease;
     font-weight: bold;
     margin-top: 20px;
-    text-decoration: none; /* Remove underline from links */
 }
 
 a:hover, input[type="submit"]:hover {
@@ -66,16 +62,14 @@ input[type="file"] {
     }
 }
 
-/* Floating images styles */
 .floating-images {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    overflow: hidden;
     pointer-events: none; /* Disable interaction with floating elements */
-    z-index: 1; /* Ensures that it stays in the background */
+    overflow: hidden;
 }
 
 .floating-img {
@@ -84,5 +78,4 @@ input[type="file"] {
     height: 10vmin;
     opacity: 0.6;
     filter: blur(8px); /* Blurred images for background effect */
-    transition: transform 0.2s ease-in-out; /* Smooth transformation */
 }
