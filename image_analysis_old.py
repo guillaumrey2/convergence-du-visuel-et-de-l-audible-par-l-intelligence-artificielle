@@ -242,15 +242,34 @@ def segment_image(image):
     segments = felzenszwalb(image, scale=100, sigma=0.8, min_size=50)
     return segments
 
-def extract_adjacent_color_features(image, segments, palette):
+""" def extract_features(image, segments, palette):
+    print("Extracting features...")
+    h, w = image.shape[:2]
     num_segments = np.max(segments) + 1
     features = []
     for seg_id in range(num_segments):
-        mask = segments == seg_id
+        mask = (segments == seg_id)
         segment_color = np.mean(image[mask], axis=0)
-        segment_size = np.sum(mask)
-        features.append(np.concatenate([segment_color, [segment_size]]))
-    features = np.array(features).flatten()
+        segment_size = np.sum(mask) / (h * w)
+        center_of_mass = np.array(np.nonzero(mask)).mean(axis=1) / np.array([h, w])
+        adjacent_colors = []
+        for i in range(h):
+            for j in range(w):
+                if segments[i, j] == seg_id:
+                    for di, dj in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                        ni, nj = i + di, j + dj
+                        if 0 <= ni < h and 0 <= nj < w and segments[ni, nj] != seg_id:
+                            adjacent_colors.append(image[ni, nj])
+        adjacent_color = np.mean(adjacent_colors, axis=0) if adjacent_colors else segment_color
+        features.append(np.concatenate([segment_color, [segment_size], center_of_mass, adjacent_color]))
+    features = np.array(features).flatten() """
+    
+    expected_features = emotion_model.n_features_in_
+    if len(features) < expected_features:
+        features = np.pad(features, (0, expected_features - len(features)), 'constant')
+    elif len(features) > expected_features:
+        features = features[:expected_features]
+    
     return features
 
 def analyze_image(image_path, output_dir):
@@ -274,7 +293,7 @@ def analyze_image(image_path, output_dir):
     
     repainted_image = repaint_image_with_palette(image, color_palette)
     segments = segment_image(repainted_image)
-    features = extract_adjacent_color_features(repainted_image, segments, color_palette)
+    features = extract_features(repainted_image, segments, color_palette)
     if features.size:
         features = features.reshape(1, -1)
 
