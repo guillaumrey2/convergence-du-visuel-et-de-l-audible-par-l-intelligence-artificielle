@@ -54,7 +54,7 @@ print('Models and label encoder saved successfully.')
 # Function to predict color label for a new RGB sample using the Random Forest model
 def predict_color_rf(rgb_sample):
     # Load the saved model and encoder
-    loaded_model = joblib.load('rf_color_classifier_model_rgb.pkl')
+    loaded_model = joblib.load('color_classifier_model.pkl')
     loaded_encoder = joblib.load('label_encoder_rgb.pkl')
     
     # Predict the label
@@ -62,16 +62,3 @@ def predict_color_rf(rgb_sample):
     color_label = loaded_encoder.inverse_transform(prediction)
     
     return color_label[0]
-
-# Example usage with RGB samples
-samples_to_test = [
-    [116, 114, 47],   # Example 1
-    [50, 88, 95],     # Example 2
-    [50, 69, 95],     # Example 3
-    [127, 137, 149],  # Example 4
-    [141, 146, 146]   # Example 5
-]
-
-for sample in samples_to_test:
-    predicted_color = predict_color_rf(sample)
-    print(f'The predicted color for RGB values {sample} using Random Forest is {predicted_color}')

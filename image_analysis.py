@@ -85,12 +85,12 @@ def contrast(image):
     std = np.sqrt(v)
     
     if v == 0:
-        alfa4 = 0  # Handle division by zero
+        alfa4 = 0
     else:
         alfa4 = m4 / (v**2)
     
     if alfa4 == 0:
-        fcon = 0  # Handle division by zero
+        fcon = 0
     else:
         fcon = std / (np.power(alfa4, 0.25))
     
@@ -104,18 +104,15 @@ def directionality(image):
     histogram, bins = np.histogram(orientation, bins=36, range=(0, 180), weights=magnitude)
     
     max_index = np.argmax(histogram)
-    main_direction = bins[max_index] if histogram.size > 0 else 0
     direction_strength = histogram[max_index] / np.sum(histogram) if np.sum(histogram) != 0 else 0
     
-    return direction_strength, main_direction
+    return direction_strength
 
 def regularity(image, block_size=32):
     scores = []
     for i in range(0, image.shape[0], block_size):
         for j in range(0, image.shape[1], block_size):
             block = image[i:i+block_size, j:j+block_size]
-            print(f"Block shape: {block.shape}")  # Debug print
-            # Ensure the block is complete
             if block.shape[0] == block_size and block.shape[1] == block_size:
                 scores.append((coarseness(block, 5), contrast(block)))
     if scores:
@@ -123,7 +120,7 @@ def regularity(image, block_size=32):
         std_devs = np.std(scores, axis=0)
         return np.mean(std_devs)
     else:
-        return 0  # Handle case where no complete blocks were found
+        return 0
 
 def roughness(fcrs, fcon):
     return fcrs + fcon
@@ -135,7 +132,7 @@ def calculate_tamura_features(image):
     print("Calculating Tamura features")
     fcrs = coarseness(image, 5)
     fcon = contrast(image)
-    fd, main_direction = directionality(image)
+    fd = directionality(image)
     freg = regularity(image)
     f_rgh = roughness(fcrs, fcon)
     
@@ -146,7 +143,7 @@ def calculate_tamura_features(image):
     freg_normalized = normalize(freg, REGULARITY_RANGE[0], REGULARITY_RANGE[1])
     f_rgh_normalized = normalize(f_rgh, ROUGHNESS_RANGE[0], ROUGHNESS_RANGE[1])
     
-    return fcrs_normalized, fcon_normalized, fd_normalized, main_direction, freg_normalized, f_rgh_normalized
+    return fcrs_normalized, fcon_normalized, fd_normalized, freg_normalized, f_rgh_normalized
 
 # ----- COLOR ----- #
 
@@ -244,7 +241,7 @@ def segment_image(image):
 
 def extract_adjacent_color_features(image, segments, palette):
     num_segments = np.max(segments) + 1
-    feature_vector_size = 10  # Adjust this based on the training script
+    feature_vector_size = 10
     feature_vectors = np.zeros((num_segments, feature_vector_size))
 
     for seg_id in range(num_segments):
@@ -272,7 +269,7 @@ def analyze_image(image_path, output_dir):
     plt.show()
     
     processed_image = tamura_preprocess_image(image)
-    fcrs, fcon, fd, main_direction, freg, f_rgh = calculate_tamura_features(processed_image)
+    fcrs, fcon, fd, freg, f_rgh = calculate_tamura_features(processed_image)
     
     dominant_color = find_dominant_color(image)
     color_label = predict_color_label(dominant_color)
@@ -280,7 +277,7 @@ def analyze_image(image_path, output_dir):
     repainted_image = repaint_image_with_palette(image, color_palette)
     segments = segment_image(repainted_image)
     features = extract_adjacent_color_features(repainted_image, segments, color_palette)
-    expected_feature_length = 39880  # Based on the error message
+    expected_feature_length = 39880
     if len(features) < expected_feature_length:
         features = np.pad(features, (0, expected_feature_length - len(features)), 'constant')
     else:

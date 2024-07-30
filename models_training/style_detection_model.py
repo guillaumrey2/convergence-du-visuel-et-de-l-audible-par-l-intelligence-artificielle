@@ -14,7 +14,7 @@ from sklearn.metrics import confusion_matrix, classification_report
 # Define paths
 base_directory = "/set/path/to/images/dataset"
 csv_directory = "/set/path/to/csv/folder"
-model_save_path = "/set/path/to/model/saving/foler"
+model_save_path = "/set/path/to/model/saving/folder/art_style_model.h5"
 
 # Load data and specify no header to define columns manually
 train_df = pd.read_csv(os.path.join(csv_directory, 'small_style_train.csv'), header=None)
