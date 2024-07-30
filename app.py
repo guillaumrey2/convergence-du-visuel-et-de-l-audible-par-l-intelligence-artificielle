@@ -3,16 +3,13 @@ import os
 from werkzeug.utils import secure_filename
 import logging
 
-# Initialize Flask and logging
 logging.basicConfig(level=logging.DEBUG)
 app = Flask(__name__)
 
-# Configuration constants
 app.config['UPLOAD_FOLDER'] = '/home/guillaum.rey2@hevs.ch/convergence-du-visuel-et-de-l-audible-par-l-intelligence-artificielle/images'
 app.config['RECORDINGS_FOLDER'] = '/home/guillaum.rey2@hevs.ch/convergence-du-visuel-et-de-l-audible-par-l-intelligence-artificielle/recordings'
 app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
 
-# Helper function to check file extensions
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
@@ -53,7 +50,6 @@ def recordings(filename):
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
-    # Determine the folder based on file extension
     if filename.lower().endswith(('.png', '.jpg', '.jpeg', '.gif')):
         folder = app.config['UPLOAD_FOLDER']
     else:
@@ -61,11 +57,10 @@ def uploaded_file(filename):
     
     file_path = os.path.join(folder, filename)
     if os.path.exists(file_path):
-        # Determine the MIME type based on file extension
         if filename.lower().endswith(('.wav', '.mp3')):
             mime_type = 'audio/wav'
         else:
-            mime_type = 'image/jpeg'  # Default for images
+            mime_type = 'image/jpeg'
         return send_file(file_path, mimetype=mime_type)
     else:
         app.logger.error("File not found: " + file_path)

@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 import json
 import joblib
-from tensorflow.keras.preprocessing.image import img_to_array, load_img
+from tensorflow.keras.preprocessing.image import img_to_array, load_img # type: ignore
 from skimage.segmentation import felzenszwalb
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
@@ -293,8 +293,9 @@ def analyze_image(image_path, output_dir):
     
     repainted_image = repaint_image_with_palette(image, color_palette)
     segments = segment_image(repainted_image)
-    features = extract_features(repainted_image, segments, color_palette)
-    features = features.reshape(1, -1)
+    features = extract_adjacent_color_features(repainted_image, segments, color_palette)
+    if features.size:
+        features = features.reshape(1, -1)
 
     predicted_emotion = emotion_model.predict(features)
     emotion_label = 'positive' if predicted_emotion == 1 else 'negative'

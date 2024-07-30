@@ -94,12 +94,12 @@ input[type="file"] {
 }
 
 audio + br + a {
-    display: block; /* makes the link a block element */
-    margin-top: 20px; /* Adds space above the download link */
+    display: block;
+    margin-top: 20px;
 }
 
 .uploaded-image {
-    max-width: 90%;  /* Adjusts the width to fit within the container */
-    height: auto;    /* Keeps the image aspect ratio intact */
-    margin-bottom: 20px; /* Adds space between the image and the audio player */
+    max-width: 90%;
+    height: auto;
+    margin-bottom: 20px;
 }
