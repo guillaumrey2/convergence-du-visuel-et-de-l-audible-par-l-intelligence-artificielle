@@ -99,7 +99,7 @@ def segment_image(image):
     return segments
 
 # Function to extract adjacent color features from segmented image
-def extract_adjacent_color_features(image, segments, palette):
+def extract_adjacent_color_features(image, segments):
     print("Extracting adjacent color features...")
     num_segments = np.max(segments) + 1
     feature_vector_size = 10
@@ -173,7 +173,7 @@ for index, row in annotations.iterrows():
         print(f"Processing image: {image_path}")
         repainted_image = repaint_image_with_palette(image, color_palette)
         segments = segment_image(repainted_image)
-        features = extract_adjacent_color_features(repainted_image, segments, color_palette)
+        features = extract_adjacent_color_features(repainted_image, segments)
         if features.size:
             features_list.append(features)
             labels_list.append(row['LABEL'])

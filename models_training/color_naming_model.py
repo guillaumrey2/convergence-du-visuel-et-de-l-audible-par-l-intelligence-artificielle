@@ -52,8 +52,8 @@ plt.savefig('confusion_matrix_rf.png', bbox_inches='tight')
 plt.show()
 
 # Save the trained model and label encoder to disk
-joblib.dump(rf_model, 'rf_color_classifier_model_rgb.pkl')
-joblib.dump(label_encoder, 'label_encoder_rgb.pkl')
+joblib.dump(rf_model, 'color_classifier_model.pkl')
+joblib.dump(label_encoder, 'label_encoder.pkl')
 print('Models and label encoder saved successfully.')
 
 # Define a function to predict the color label for a given RGB sample using the trained model

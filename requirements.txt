@@ -4,9 +4,6 @@ joblib
 tensorflow
 scikit-image
 scikit-learn==1.5.0
-matplotlib
-watchdog
-gunicorn
 Flask
 Flask-Uploads
 pandas

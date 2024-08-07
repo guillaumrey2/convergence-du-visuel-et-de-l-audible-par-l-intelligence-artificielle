@@ -5,7 +5,7 @@ import cv2
 import numpy as np
 import json
 import joblib
-from tensorflow.keras.preprocessing.image import img_to_array, load_img  # Image processing from Keras
+from tensorflow.keras.preprocessing.image import img_to_array, load_img  # type: ignore # Image processing from Keras
 from skimage.segmentation import felzenszwalb  # Image segmentation from skimage
 from sklearn.cluster import KMeans  # KMeans clustering from sklearn
 from sklearn.metrics import silhouette_score  # Silhouette score for clustering evaluation
@@ -23,7 +23,7 @@ color_palette = np.load(os.path.join(MODEL_PATH, 'color_palette.npy'))
 art_style_model = tf.keras.models.load_model(os.path.join(MODEL_PATH, 'art_style_model.h5'))
 
 # Normalization ranges based on data analysis
-COARSENESS_RANGE = (1, 3.5)
+COARSENESS_RANGE = (1, 35)
 CONTRAST_RANGE = (0, 100)
 DIRECTIONALITY_RANGE = (0, 0.5)
 ROUGHNESS_RANGE = (0, 100)
@@ -47,8 +47,8 @@ style_map_reverse = {
 def tamura_preprocess_image(image):
     print("Preprocessing the image for grayscale and blur...")
     gray_img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    resized_img = cv2.resize(gray_img, (256, 256))
-    smooth_img = cv2.GaussianBlur(resized_img, (5, 5), 0)
+    # resized_img = cv2.resize(gray_img, (256, 256))
+    smooth_img = cv2.GaussianBlur(gray_img, (5, 5), 0)
     return smooth_img
 
 # Function to calculate coarseness
@@ -139,7 +139,7 @@ def normalize(value, min_val, max_val):
 # Function to calculate Tamura texture features
 def calculate_tamura_features(image):
     print("Calculating Tamura features")
-    fcrs = coarseness(image, 5)
+    fcrs = coarseness(image, 7)
     fcon = contrast(image)
     fd = directionality(image)
     freg = regularity(image)
@@ -160,7 +160,7 @@ def calculate_tamura_features(image):
 def color_preprocess_image(image):
     image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     blurred_image = cv2.GaussianBlur(image_rgb, (5, 5), 0)
-    resized_image = cv2.resize(blurred_image, (100, 100))
+    resized_image = cv2.resize(blurred_image, (250, 250))
     return resized_image
 
 # Function to find the optimal number of clusters for KMeans
@@ -177,7 +177,7 @@ def find_optimal_clusters(pixel_values, max_k=10):
     return best_k
 
 # Function to filter out dark pixels
-def filter_dark_pixels(pixel_values, dark_threshold=30, black_threshold=0.5):
+def filter_dark_pixels(pixel_values, dark_threshold=30, black_threshold=0.3):
     dark_pixels = np.all(pixel_values < [dark_threshold, dark_threshold, dark_threshold], axis=1)
     dark_proportion = np.sum(dark_pixels) / pixel_values.shape[0]
     print(f"Proportion of dark pixels: {dark_proportion}")
@@ -256,7 +256,7 @@ def segment_image(image):
     return segments
 
 # Function to extract adjacent color features from the image segments
-def extract_adjacent_color_features(image, segments, palette):
+def extract_adjacent_color_features(image, segments):
     num_segments = np.max(segments) + 1
     feature_vector_size = 10
     feature_vectors = np.zeros((num_segments, feature_vector_size))
@@ -294,7 +294,7 @@ def analyze_image(image_path, output_dir):
     
     repainted_image = repaint_image_with_palette(image, color_palette)
     segments = segment_image(repainted_image)
-    features = extract_adjacent_color_features(repainted_image, segments, color_palette)
+    features = extract_adjacent_color_features(repainted_image, segments)
     expected_feature_length = 39880
     if len(features) < expected_feature_length:
         features = np.pad(features, (0, expected_feature_length - len(features)), 'constant')
