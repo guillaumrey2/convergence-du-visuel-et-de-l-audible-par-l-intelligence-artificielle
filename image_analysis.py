@@ -151,6 +151,7 @@ def normalize(value, min_val, max_val):
 def calculate_tamura_features(image):
     print("Calculating Tamura features")
     fcrs = coarseness(image, 3)
+    print(f"Raw coarseness value: {fcrs}")
     fcon = contrast(image)
     fd = directionality(image)
     freg = regularity(image)
@@ -158,6 +159,7 @@ def calculate_tamura_features(image):
     
     # Normalize features
     fcrs_normalized = normalize(fcrs, COARSENESS_RANGE[0], COARSENESS_RANGE[1])
+    print(f"Normalized coarseness value: {fcrs_normalized}")
     fcon_normalized = normalize(fcon, CONTRAST_RANGE[0], CONTRAST_RANGE[1])
     fd_normalized = normalize(fd, DIRECTIONALITY_RANGE[0], DIRECTIONALITY_RANGE[1])
     freg_normalized = normalize(freg, REGULARITY_RANGE[0], REGULARITY_RANGE[1])
@@ -297,7 +299,7 @@ def analyze_image(image_path, output_dir):
     plt.title("Loaded Image")
     plt.show()
     
-    processed_image = tamura_preprocess_image(image)
+    processed_image = tamura_preprocess_image(image,)
     fcrs, fcon, fd, freg, f_rgh = calculate_tamura_features(processed_image)
     
     dominant_color = find_dominant_color(image)
