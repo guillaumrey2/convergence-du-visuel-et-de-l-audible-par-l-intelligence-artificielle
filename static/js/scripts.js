@@ -11,7 +11,7 @@ window.addEventListener('DOMContentLoaded', () => {
         img.style.position = 'absolute'; // Set the image position to absolute
         img.style.top = `${Math.random() * 100}%`; // Randomize the top position
         img.style.left = `${Math.random() * 100}%`; // Randomize the left position
-        img.style.transform = `translate(-50%, -50%) scale(${Math.random() * 0.5 + 0.7})`; // Apply random scale transformation
+        img.style.transform = `translate(-50%, -50%) scale(${Math.random() * 0.5 + 3})`; // Apply random scale transformation
         img.style.opacity = 0; // Set initial opacity to 0
 
         container.appendChild(img); // Append the image to the container

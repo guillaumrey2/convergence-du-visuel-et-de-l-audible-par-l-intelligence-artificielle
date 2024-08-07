@@ -23,7 +23,7 @@ color_palette = np.load(os.path.join(MODEL_PATH, 'color_palette.npy'))
 art_style_model = tf.keras.models.load_model(os.path.join(MODEL_PATH, 'art_style_model.h5'))
 
 # Normalization ranges based on data analysis
-COARSENESS_RANGE = (3.5, 5.4)
+COARSENESS_RANGE = (1, 4)
 CONTRAST_RANGE = (0, 100)
 DIRECTIONALITY_RANGE = (0, 0.5)
 ROUGHNESS_RANGE = (0, 100)
@@ -120,7 +120,7 @@ def regularity(image, block_size=32):
         for j in range(0, image.shape[1], block_size):
             block = image[i:i+block_size, j:j+block_size]
             if block.shape[0] == block_size and block.shape[1] == block_size:
-                scores.append((coarseness(block, 5), contrast(block)))
+                scores.append((coarseness(block, 3), contrast(block)))
     if scores:
         scores = np.array(scores)
         std_devs = np.std(scores, axis=0)
@@ -139,7 +139,7 @@ def normalize(value, min_val, max_val):
 # Function to calculate Tamura texture features
 def calculate_tamura_features(image):
     print("Calculating Tamura features")
-    fcrs = coarseness(image, 7)
+    fcrs = coarseness(image, 3)
     fcon = contrast(image)
     fd = directionality(image)
     freg = regularity(image)
