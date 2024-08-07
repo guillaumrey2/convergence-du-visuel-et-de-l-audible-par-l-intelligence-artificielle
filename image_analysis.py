@@ -131,7 +131,7 @@ def regularity(image, block_size=32):
         for j in range(0, image.shape[1], block_size):
             block = image[i:i+block_size, j:j+block_size]
             if block.shape[0] == block_size and block.shape[1] == block_size:
-                scores.append((coarseness(block, 3), contrast(block)))
+                scores.append((coarseness(block, 5), contrast(block)))
     if scores:
         scores = np.array(scores)
         std_devs = np.std(scores, axis=0)
@@ -150,7 +150,7 @@ def normalize(value, min_val, max_val):
 # Function to calculate Tamura texture features
 def calculate_tamura_features(image):
     print("Calculating Tamura features")
-    fcrs = coarseness(image, 3)
+    fcrs = coarseness(image, 5)
     print(f"Raw coarseness value: {fcrs}")
     fcon = contrast(image)
     fd = directionality(image)
