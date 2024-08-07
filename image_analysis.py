@@ -44,11 +44,22 @@ style_map_reverse = {
 # ----- TEXTURE ----- #
 
 # Function to preprocess the image for texture analysis
-def tamura_preprocess_image(image):
-    print("Preprocessing the image for grayscale and blur...")
+def tamura_preprocess_image(image, target_size=(256, 256)):
     gray_img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    # resized_img = cv2.resize(gray_img, (256, 256))
-    smooth_img = cv2.GaussianBlur(gray_img, (5, 5), 0)
+    
+    h, w = gray_img.shape[:2]
+    target_w, target_h = target_size
+    aspect_ratio = w / h
+    
+    if aspect_ratio > 1:  # Width is greater, resize by width
+        new_w = target_w
+        new_h = int(new_w / aspect_ratio)
+    else:  # Height is greater, resize by height
+        new_h = target_h
+        new_w = int(new_h * aspect_ratio)
+    
+    resized_img = cv2.resize(gray_img, (new_w, new_h))
+    smooth_img = cv2.GaussianBlur(resized_img, (5, 5), 0)
     return smooth_img
 
 # Function to calculate coarseness
