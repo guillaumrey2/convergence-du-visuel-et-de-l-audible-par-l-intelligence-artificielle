@@ -145,7 +145,12 @@ def roughness(fcrs, fcon):
 
 # Function to normalize a value
 def normalize(value, min_val, max_val):
-    return (value - min_val) / (max_val - min_val)
+    if value < min_val:
+        return 0.0
+    elif value > max_val:
+        return 1.0
+    else:
+        return (value - min_val) / (max_val - min_val)
 
 # Function to calculate Tamura texture features
 def calculate_tamura_features(image):
