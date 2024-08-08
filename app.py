@@ -13,7 +13,7 @@ app = Flask(__name__)
 # Configure upload and recordings folders and allowed extensions
 app.config['UPLOAD_FOLDER'] = '/home/guillaum.rey2@hevs.ch/convergence-du-visuel-et-de-l-audible-par-l-intelligence-artificielle/images'
 app.config['RECORDINGS_FOLDER'] = '/home/guillaum.rey2@hevs.ch/convergence-du-visuel-et-de-l-audible-par-l-intelligence-artificielle/recordings'
-app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
+app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg'}
 
 # Function to check if a file is allowed based on its extension
 def allowed_file(filename):
@@ -62,14 +62,14 @@ def recordings(filename):
 # Route to serve uploaded files
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
-    if filename.lower().endswith(('.png', '.jpg', '.jpeg', '.gif')):
+    if filename.lower().endswith(('.png', '.jpg', '.jpeg')):
         folder = app.config['UPLOAD_FOLDER']
     else:
         folder = app.config['RECORDINGS_FOLDER']
     
     file_path = os.path.join(folder, filename)
     if os.path.exists(file_path):
-        if filename.lower().endswith(('.wav', '.mp3')):
+        if filename.lower().endswith(('.wav')):
             mime_type = 'audio/wav'
         else:
             mime_type = 'image/jpeg'
