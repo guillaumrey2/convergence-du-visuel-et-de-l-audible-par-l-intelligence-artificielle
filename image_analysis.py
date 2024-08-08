@@ -30,7 +30,7 @@ ROUGHNESS_RANGE = (0, 100)
 REGULARITY_RANGE = (0, 30)
 
 # Define reverse mapping dictionary for style prediction
-style_map_reverse = {
+""" style_map_reverse = {
     0: 'abstract',
     1: 'color_field',
     2: 'cubism',
@@ -39,6 +39,17 @@ style_map_reverse = {
     5: 'realism',
     6: 'romanticism',
     7: 'symbolism'
+} """
+
+style_map_reverse = {
+    0: 'abstract',
+    5: 'color_field',
+    7: 'cubism',
+    9: 'expressionism',
+    12: 'impressionism',
+    21: 'realism',
+    23: 'romanticism',
+    24: 'symbolism'
 }
 
 # ----- TEXTURE ----- #
