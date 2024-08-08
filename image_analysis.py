@@ -43,13 +43,13 @@ REGULARITY_RANGE = (0, 30)
 
 style_map_reverse = {
     0: 'abstract',
+    1: 'impressionism',
+    2: 'realism',
+    3: 'romanticism',
+    4: 'symbolism',
     5: 'color_field',
-    7: 'cubism',
-    9: 'expressionism',
-    12: 'impressionism',
-    21: 'realism',
-    23: 'romanticism',
-    24: 'symbolism'
+    6: 'cubism',
+    7: 'expressionism'
 }
 
 # ----- TEXTURE ----- #
