@@ -322,13 +322,14 @@ def analyze_image(image_path, output_dir):
     features = features.reshape(1, -1)
 
     predicted_emotion = emotion_model.predict(features)
-    predicted_emotion_label = predicted_emotion[0]
-    predicted_emotion_prob = emotion_model.predict_proba(features)[:, predicted_emotion_label]
+    predicted_emotion_label = emotion_model.predict(features)[0]
+    predicted_emotion_prob = emotion_model.predict_proba(features)[0][predicted_emotion_label]
+
 
     emotion_label = 'positive' if predicted_emotion == 1 else 'negative'
 
     print(f"Predicted Emotion: {emotion_label}")
-    print(f"Probability of positive emotion: {predicted_emotion_prob[0]:.2f}")
+    print(f"Probability of '{emotion_label}' emotion: {predicted_emotion_prob:.2f}")
     
     keras_image = load_img(image_path, target_size=(224, 224))
     keras_image = img_to_array(keras_image)
