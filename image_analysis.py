@@ -322,7 +322,13 @@ def analyze_image(image_path, output_dir):
     features = features.reshape(1, -1)
 
     predicted_emotion = emotion_model.predict(features)
+    predicted_emotion_label = predicted_emotion[0]
+    predicted_emotion_prob = emotion_model.predict_proba(features)[:, predicted_emotion_label]
+
     emotion_label = 'positive' if predicted_emotion == 1 else 'negative'
+
+    print(f"Predicted Emotion: {emotion_label}")
+    print(f"Probability of positive emotion: {predicted_emotion_prob[0]:.2f}")
     
     keras_image = load_img(image_path, target_size=(224, 224))
     keras_image = img_to_array(keras_image)
@@ -331,6 +337,11 @@ def analyze_image(image_path, output_dir):
     style_prediction = art_style_model.predict(keras_image)
     style_label_index = np.argmax(style_prediction)
     style_label = style_map_reverse[style_label_index]
+
+    style_probabilities = {style_map_reverse[i]: float(prob) * 100 for i, prob in enumerate(style_prediction[0])}
+
+    print(f"Predicted Style: {style_label}")
+    print(f"Style Probabilities: {style_probabilities}")
     
     result = {
         "image": base_filename,
