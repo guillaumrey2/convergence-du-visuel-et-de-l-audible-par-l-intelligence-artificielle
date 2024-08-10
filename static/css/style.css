@@ -3,7 +3,8 @@ body, html {
     height: 100%;
     margin: 0;
     padding: 0;
-    overflow: hidden; /* Prevent scrolling */
+    overflow-y: auto; /* Allow vertical scrolling */
+    overflow-x: hidden; /* Prevent horizontal scrolling */
     font-family: 'Poppins', sans-serif; /* Set font family */
     display: flex; /* Use flexbox for centering */
     justify-content: center; /* Center horizontally */
