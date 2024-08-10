@@ -2,7 +2,7 @@
 
 WATCHED_DIR=~/convergence-du-visuel-et-de-l-audible-par-l-intelligence-artificielle/results
 SCLANG_PATH=/usr/local/bin/sclang
-SC_SCRIPT_PATH=~/scscript/sound_synthesis.scd
+SC_SCRIPT_PATH=~/convergence-du-visuel-et-de-l-audible-par-l-intelligence-artificielle/scscript/sound_synthesis.scd
 LOG_FILE=~/convergence-du-visuel-et-de-l-audible-par-l-intelligence-artificielle/watch_results.log
 TEMP_FILE=~/convergence-du-visuel-et-de-l-audible-par-l-intelligence-artificielle/temp.txt
 
