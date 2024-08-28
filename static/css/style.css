@@ -117,3 +117,23 @@ audio + br + a {
     height: auto; /* Maintain aspect ratio */
     margin-bottom: 20px; /* Bottom margin */
 }
+
+/* Styling for Home button */
+.home-button {
+    background-color: #ffffff;
+    color: #405D72;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 25px;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+    margin-top: 20px;
+    cursor: pointer;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.home-button:hover {
+    background-color: #e0deed;
+}
