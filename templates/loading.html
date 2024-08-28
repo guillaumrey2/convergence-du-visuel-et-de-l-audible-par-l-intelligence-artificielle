@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Loading...</title>
+    <title>Chargement...</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
@@ -9,9 +9,8 @@
 <body>
     <div id="floatingImages" class="floating-images"></div>
     <div class="content">
-        <a href="{{ url_for('accueil') }}" class="home-button">Home</a>
         <div class="loader"></div>
-        <h1>Please wait while we process your request...</h1>
+        <h1>Veuillez patienter pendant que nous traitons votre demande...</h1>
     </div>
     <script>
         var filename = "{{ filename }}";

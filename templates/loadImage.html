@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Upload Image</title>
+    <title>Sélectionner une image</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     <div id="floatingImages" class="floating-images"></div>
     <div class="content">
-        <a href="{{ url_for('accueil') }}" class="home-button">Home</a>
-        <h1>Upload Your Image</h1>
+        <a href="{{ url_for('accueil') }}" class="home-button">Accueil</a>
+        <h1>Sélectionnez votre image</h1>
         <form action="/loadImage" method="post" enctype="multipart/form-data">
             <input type="file" name="file">
-            <input type="submit" value="Upload">
+            <input type="submit" value="Télécharger">
         </form>
     </div>
     <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>

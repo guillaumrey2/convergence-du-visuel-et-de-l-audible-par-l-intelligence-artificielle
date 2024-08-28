@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Recording Page</title>
+    <title>Page d'enregistrement</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     <div id="floatingImages" class="floating-images"></div>
     <div class="content">
-        <a href="{{ url_for('accueil') }}" class="home-button">Home</a>
-        <h1>Recording for {{ filename }}</h1>
-        <img src="{{ url_for('uploaded_file', filename=filename) }}" alt="Uploaded Image" style="max-width: 100%; height: auto; display: block; margin-bottom: 20px;">
+        <a href="{{ url_for('accueil') }}" class="home-button">Accueil</a>
+        <h1>Composition pour : {{ filename }}</h1>
+        <img src="{{ url_for('uploaded_file', filename=filename) }}" alt="Image Téléchargée" style="max-width: 100%; height: auto; display: block; margin-bottom: 20px;">
         <audio controls>
             <source src="{{ url_for('uploaded_file', filename=filename.rsplit('.', 1)[0] + '.wav') }}" type="audio/wav">
-            Your browser does not support the audio element.
+            Votre navigateur ne supporte pas l'élément audio.
         </audio>
         <br>
-        <a href="{{ url_for('uploaded_file', filename=filename.rsplit('.', 1)[0] + '.wav') }}" download="{{ filename.rsplit('.', 1)[0] + '.wav' }}">Download Audio</a>
+        <a href="{{ url_for('uploaded_file', filename=filename.rsplit('.', 1)[0] + '.wav') }}" download="{{ filename.rsplit('.', 1)[0] + '.wav' }}">Télécharger l'audio</a>
     </div>
     <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 </body>
